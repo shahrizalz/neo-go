@@ -204,10 +204,6 @@ func (p *PublicKey) DecodeBinary(r *io.BinReader) {
 		}
 		x = new(big.Int).SetBytes(xbytes)
 		y = new(big.Int).SetBytes(ybytes)
-		if !p256.IsOnCurve(x, y) {
-			r.Err = errors.New("encoded point is not on the P256 curve")
-			return
-		}
 	default:
 		r.Err = errors.Errorf("invalid prefix %d", prefix)
 		return
@@ -221,7 +217,13 @@ func (p *PublicKey) DecodeBinary(r *io.BinReader) {
 
 // EncodeBinary encodes a PublicKey to the given BinWriter.
 func (p *PublicKey) EncodeBinary(w *io.BinWriter) {
-	w.WriteBytes(p.Bytes())
+	w.WriteB(0x04)
+	buf := p.X.Bytes()
+	w.WriteBytes(bytes.Repeat([]byte{0x00}, 32-len(buf)))
+	w.WriteBytes(buf)
+	buf = p.Y.Bytes()
+	w.WriteBytes(bytes.Repeat([]byte{0x00}, 32-len(buf)))
+	w.WriteBytes(buf)
 }
 
 // GetVerificationScript returns NEO VM bytecode with CHECKSIG command for the
