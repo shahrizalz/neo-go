@@ -20,7 +20,7 @@ func TestGenesisBlockMainNet(t *testing.T) {
 	// have been changed. Consequently, hash of the genesis block has been changed.
 	// Update expected genesis block hash for better times.
 	// Old hash is "d42561e3d30e15be6400b6df2f328e02d2bf6354c41dce433bc57687c82144bf"
-	expect := "a8dc0469706bd635ec0ee666ba75a418c4b47f14b67276f49f6a8aca66badb4f"
+	expect := "829c600d907ada92a62a0279bc4e966fb13f104c295a4c911369238a600ed2da"
 	assert.Equal(t, expect, block.Hash().StringLE())
 }
 
